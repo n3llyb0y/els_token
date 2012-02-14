@@ -73,7 +73,7 @@ module ElsToken
 
   def fake_it?
     self.class.els_options[:faker] &&
-    self.class.els_options[:faker][:environments].include?(Rails.env.to_sym)
+    self.class.els_options[:faker][:environments].include?(Rails.env)
   end
 
 end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class HelloControllerTest < ActionController::TestCase
   test "should get index" do
-    @controller.class.els_faker("neilcuk",:development,:test)
+    @controller.class.els_faker("neilcuk","development","test")
     get :index
     assert_response :success
     assert_not_nil assigns(:cdid)

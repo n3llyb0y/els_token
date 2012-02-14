@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   include ElsToken
-  els_faker "neilcuk",:development,:test
+  els_faker "neilcuk","development","test"
   els_base_uri "https://elsuat-admin.corp.aol.com:443/opensso/identity/authenticate"
   
   before_filter :authenticate
