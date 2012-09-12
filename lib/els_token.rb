@@ -64,6 +64,7 @@ module ElsToken
 
   #extract the token from the rack cookie
   def is_cookie_token_valid?
+    return true if fake_it?
     token = cookies[self.class.els_options['cookie']]
     if token.nil? || !is_token_valid?(token)
       false
@@ -87,7 +88,7 @@ module ElsToken
   # from the session cookie and return a full
   # identity
   def get_identity
-      
+    return fake_id if fake_it?
     begin
       if is_cookie_token_valid?
         get_token_identity cookies[self.class.els_options['cookie']]
@@ -139,19 +140,22 @@ module ElsToken
     self.class.els_options.has_key? 'faker'
   end
 
-  def build_fake_id
-    id = ElsIdentity.new
-    id.instance_variable_set("@roles",self.class.els_options['faker']['roles'])
-    id.instance_variable_set("@mail",self.class.els_options['faker']['mail'])
-    id.instance_variable_set("@last_name",self.class.els_options['faker']['last_name'])
-    id.instance_variable_set("@first_name",self.class.els_options['faker']['first_name'])
-    id.instance_variable_set("@uac",self.class.els_options['faker']['uac'])
-    id.instance_variable_set("@dn",self.class.els_options['faker']['dn'])
-    id.instance_variable_set("@common_name",self.class.els_options['faker']['common_name'])
-    id.instance_variable_set("@employee_number",self.class.els_options['faker']['employee_number'])
-    id.instance_variable_set("@display_name",self.class.els_options['faker']['display_name'])
-    id.instance_variable_set("@token_id",self.class.els_options['faker']['token_id'])
-    id
+  def fake_id
+    unless @fake_id
+      id = ElsIdentity.new
+      id.instance_variable_set("@roles",self.class.els_options['faker']['roles'])
+      id.instance_variable_set("@mail",self.class.els_options['faker']['mail'])
+      id.instance_variable_set("@last_name",self.class.els_options['faker']['last_name'])
+      id.instance_variable_set("@first_name",self.class.els_options['faker']['first_name'])
+      id.instance_variable_set("@uac",self.class.els_options['faker']['uac'])
+      id.instance_variable_set("@dn",self.class.els_options['faker']['dn'])
+      id.instance_variable_set("@common_name",self.class.els_options['faker']['common_name'])
+      id.instance_variable_set("@employee_number",self.class.els_options['faker']['employee_number'])
+      id.instance_variable_set("@display_name",self.class.els_options['faker']['display_name'])
+      id.instance_variable_set("@token_id",self.class.els_options['faker']['token_id'])
+      @fake_id = id
+    end
+    @fake_id
   end
 
 end
