@@ -1,0 +1,12 @@
+test:
+  faker:
+    name: neilcuk
+    employee_number: 09095
+    roles:
+      - Passport Admins
+      - Domain Users
+  uri: https://els-admin.corp.aol.com:443/opensso/identity
+  cookie: iPlanetDirectoryPro
+
+    
+    

@@ -2,20 +2,17 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   include ElsToken
-  els_faker "neilcuk","development","test"
-  els_base_uri "https://elsuat-admin.corp.aol.com:443/opensso/identity/authenticate"
+  #els_options ELS_CONFIG
   
   before_filter :authenticate
   
-
   private
   
   def authenticate
-    session[:user_cdid] ||= get_els_token
-    unless session[:user_cdid]
+    session[:user] ||= get_identity
+    unless session[:user]
       render :nothing => true, :status => :unauthorized
     end
-    @authenticated = els_authenticated?(@username,@password)
   end
 
 end
