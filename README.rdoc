@@ -1,3 +1,9 @@
-= ElsToken
+= ELS Token
 
-This project rocks and uses MIT-LICENSE.
+A simple library for interfacing with forgeRock OpenAM REST Interface.
+
+Still pretty much in development but kind of workable.
+
+= TODO
+Refactor to remove explicit Rack based session interrogation.
+Refactor and fix tests
