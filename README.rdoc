@@ -4,6 +4,16 @@ A simple library for interfacing with forgeRock OpenAM REST Interface.
 
 Still pretty much in development but kind of workable.
 
+change log
+
+1.0.1
+  Removed AOLMemberCA certificate as it was mostly pointless
+  SSL without verification is used as default
+
+
+1.0.0
+  Initial release :)
+
 = TODO
-Refactor to remove explicit Rack based session interrogation.
+Refactor to remove explicit Rack based session interrogation (drop rails dependency).
 Refactor and fix tests

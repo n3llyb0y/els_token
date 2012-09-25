@@ -4,9 +4,7 @@ require 'net/http'
 require 'uri'
 
 module ElsToken
-  
-  RootCA = "#{File.dirname(__FILE__)}/../cert/AOLMemberCA"
-  
+    
   def self.included(base)
     base.extend ClassMethods
     base.send :include, ElsToken::ModuleInheritableAttributes
@@ -112,24 +110,20 @@ module ElsToken
     http = Net::HTTP.new(uri.host,uri.port)
     http.use_ssl = true
     
-    # Override the default CA if option is
-    # passed in
+    # Use a known certificate if supplied
     if rootca = self.class.els_options[:cert]
       if File.exist? rootca
         http.ca_file = rootca
       elsif Dir.exist? rootca
         http.ca.path = rootca
       else
-        # throw - if option passed in we are not
-        # going to attempt to use the default cert
         raise "${rootca} cannot be found"
       end
+      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      http.verify_depth = 5
     else
-      http.ca_file = RootCA
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
-        
-    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    http.verify_depth = 5
     
     request = Net::HTTP::Get.new(uri.request_uri)
 
