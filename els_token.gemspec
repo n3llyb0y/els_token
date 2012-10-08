@@ -11,21 +11,9 @@ Gem::Specification.new do |s|
   s.email       = ["neil.chambers@teamaol.com"]
   s.homepage    = "http://wiki.office.aol.com/wiki/Els_Token"
   s.summary     = "A simple plugin to assist ELS token validation"
-  s.description = <<-EOD
-    This is a rails plugin to help with ELS Token Validation.
-    include the ElsToken module in your application controller and
-    set optional fake_it and els_uri properties
-
-    call get_els_token to extract the user cdid
-    or els_authenticated?(username,password) to get
-    a boolean
-    EOD
+  s.description = "A simple plugin to assist ELS token validation"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
   
-  # Will remove this dependency in future
-  s.add_dependency "rails", ">= 3.1.3"
-
-  s.add_development_dependency "sqlite3"
 end

@@ -5,7 +5,7 @@ test:
     roles:
       - Passport Admins
       - Domain Users
-  uri: https://els-admin.corp.aol.com:443/opensso/identity
+  uri: https://els-sso.corp.aol.com:443/opensso/identity
   cookie: iPlanetDirectoryPro
 
     

@@ -14,18 +14,39 @@ module ElsToken
 
   module ClassMethods
     
-    # els_config expects a nice hash telling
-    # it if it will have a fake user (handy for dev)
-    # and the url of the openAM REST API.
-    # { faker => { user => 'username',
-    #             :environments => ['dev','test'] },
-    #   uri => 'https://openam.url' }
+    # els_config expects a hash with environmental
+    # parameters including the els gateway and expected
+    # cookie name (when used in a Rack environment)
+    # An optional fake identity can be supplied which
+    # will override any active authentication. This can
+    # be especially useful during automated testing.
     #
-    #   class MyController
-    #     include ElsToken
-    #     els_config options_hash
-    #   end
+    # A typical setup would initialize a options hash to
+    # include the following
+    #
+    #  faker:
+    #    name: neilcuk
+    #    employee_number: 09095
+    #    roles:
+    #      - App Admins
+    #      - Domain Users
+    #  uri: https://els-admin.corp.aol.com:443/opensso/identity
+    #  cookie: iPlanetDirectoryPro
+    #  cert: /path/to/certs
+    #
+    # Do not include the faker object in your production
+    # configuration :)
+    #
+    # only the uri option is required if you are not worried
+    # about cookies and do not plan on using them. If you want
+    # to include a certificate for interacting with the ELS
+    # server then you can specify a file or directory to find
+    # the cert. By default Certificate validiation is off!
+    #
     def els_config(options = {})
+      unless options["uri"]
+        raise "I need a uri to authenticate against" unless options["faker"]
+      end
       @els_options = options
     end
   
@@ -51,6 +72,7 @@ module ElsToken
     end
   end
   
+  # passes a token to els to see if it is still valid
   def is_token_valid?(token)
     response = els_http_request("/isTokenValid","tokenid=#{token}")
     if response.code.eql? "200"
@@ -60,7 +82,10 @@ module ElsToken
     end
   end
 
-  #extract the token from the rack cookie
+  # extract the token from a cookie
+  # This method expects a hash called cookies
+  # to be present. It will look for a cookie with
+  # the key of the cookie value in the config hash
   def is_cookie_token_valid?
     return true if fake_it?
     token = cookies[self.class.els_options['cookie']]
@@ -71,11 +96,19 @@ module ElsToken
     end
   end
 
-  # obtain a full ElsIdentity object
+  # obtain a friendly ElsIdentity object by passing
+  # in a token
   def get_token_identity(token)
+    ElsIdentity.new(get_raw_token_identity(token))
+  end
+  
+  # get_token_identity wraps the ELS identity response
+  # in a nice, friendly, object. If you don't like that object
+  # or need the raw data, then use this.
+  def get_raw_token_identity(token)
     response = els_http_request("/attributes","subjectid=#{token}")
     if response.code.eql? "200"
-      ElsIdentity.new(response.body)
+      response.body
     else
       response.error!
     end
@@ -84,7 +117,9 @@ module ElsToken
   # When used inside a rack environment
   # will attempt to retrieve the user token
   # from the session cookie and return a full
-  # identity
+  # identity. This is pretty much a convenience
+  # method that chains is_cookie_token_valid?
+  # then get_token_identity
   def get_identity
     return fake_id if fake_it?
     begin
@@ -97,10 +132,7 @@ module ElsToken
       raise e
     end
   end 
-      
-  def method_missing(m, *args, &block)
-    puts "Drop the crack pipe - There is no method called #{m}"
-  end
+  
 
   private
   
