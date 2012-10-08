@@ -1,5 +1,5 @@
 require 'els_token/module_inheritable_attributes'
-require 'els_token/els_user'
+require 'els_token/els_identity'
 require 'net/http'
 require 'uri'
 
@@ -20,6 +20,7 @@ module ElsToken
     # An optional fake identity can be supplied which
     # will override any active authentication. This can
     # be especially useful during automated testing.
+    # The fake ID can take any of the ElsIdentity properties
     #
     # A typical setup would initialize a options hash to
     # include the following
@@ -88,6 +89,7 @@ module ElsToken
   # the key of the cookie value in the config hash
   def is_cookie_token_valid?
     return true if fake_it?
+    raise "No cookies instance found" if cookies.nil?
     token = cookies[self.class.els_options['cookie']]
     if token.nil? || !is_token_valid?(token)
       false
@@ -133,7 +135,6 @@ module ElsToken
     end
   end 
   
-
   private
   
   def els_http_request(url_base_extension, query_string)
@@ -179,6 +180,7 @@ module ElsToken
       id.instance_variable_set("@employee_number",self.class.els_options['faker']['employee_number'])
       id.instance_variable_set("@display_name",self.class.els_options['faker']['display_name'])
       id.instance_variable_set("@token_id",self.class.els_options['faker']['token_id'])
+      id.instance_variable_set("@user_status",self.class.els_options['faker']['user_status'])
       @fake_id = id
     end
     @fake_id

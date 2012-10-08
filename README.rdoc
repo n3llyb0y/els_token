@@ -4,6 +4,10 @@ A simple library for interfacing with forgeRock OpenAM REST Interface.
 
 Still pretty much in development but kind of workable.
 
+== Usage
+
+include ElsToken into your class or module
+
 change log
 
 1.2.0
