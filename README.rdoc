@@ -6,6 +6,10 @@ Still pretty much in development but kind of workable.
 
 change log
 
+1.2.0
+  Removed Rails dependency. 
+  Cleaned up instructions - getting ready to bare all :)
+
 1.0.1
   Removed AOLMemberCA certificate as it was mostly pointless
   SSL without verification is used as default
@@ -15,5 +19,7 @@ change log
   Initial release :)
 
 = TODO
-Refactor to remove explicit Rack based session interrogation (drop rails dependency).
-Refactor and fix tests
+With the correct level of priviledge it's possible to perform granular LDAP searches against the OpenAM REST interface. 
+By Default one can only pull identity details for a provided token but it might be nice to search against other attributes.
+
+Erm some tests might be nice :)
