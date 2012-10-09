@@ -1,0 +1,41 @@
+<h1>Oops! Authentication Required</h1>
+<p>We are currently running with a <span class="env"><%= Rails.env %></span> configuration</p>
+
+<div class='flash'>
+  <% if flash[:notice] %>
+    <p class="notice"><%= flash[:notice] %></p>
+  <% end %>
+
+  <% if flash[:error] %>
+    <p class="error"><%= flash[:error] %></p>
+  <% end %>
+</div>
+
+<% if Rails.env.eql? "development" %>
+  <p>As a convenience, anyone can login as anyone when in dev mode - just enter a valid cdid and go</p>
+  <p>If you need to test real authentication, uncheck the override box and enter a UAT password.<br>
+    If you don't know what your UAT cdid password is then speak to someone in EIO@teamaol.com</p>
+<% else %>
+  <p>This login screen should only appear when in development mode so something has gone wrong.<br> 
+    However, you can still use the system if you enter valid cdid credentials.<br> 
+    Someone has been notified of the situation so don't worry :)
+  </p>
+<% end %>
+
+<%= form_tag els_session_create_path, :class => "els_session" do %>
+  <div class="field">
+    <%= label_tag :username %>
+    <%= text_field_tag :username, params[:username] %>
+  </div>
+  <div class="field<%= Rails.env.eql?("development") ? ' default_hidden' : '' %>">
+    <%= label_tag :password %>
+    <%= password_field_tag :password, params[:password] %>
+  </div>
+  <% if Rails.env.eql? "development" %>
+    <div class="field">
+      <%= label_tag "Override: Just log me in and forget the password. I know what I'm doing, honest :)" %>
+      <%= check_box_tag :override, params[:override], :value => 1 %>
+    </div>
+  <% end %>
+  <div class="actions"><%= submit_tag "Log in" %></div>
+<% end %>

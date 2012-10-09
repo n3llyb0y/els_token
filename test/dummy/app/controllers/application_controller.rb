@@ -9,17 +9,22 @@ class ApplicationController < ActionController::Base
   private
   
   def els_identity
-    begin
-      if session["els_token"]
-        @els_identity ||= get_identity
-      else
-        session[:redirect_to] = request.env["PATH_INFO"]
-        logger.debug("user will be returned to #{session[:redirect_to]}")
-        redirect_to session_new_path
+    # test for override first
+    if session[:els_override]
+      @els_identity = session[:els_override]
+    else
+      begin
+        if session[:els_token]
+          @els_identity ||= get_identity
+        else
+          session[:redirect_to] = request.env["PATH_INFO"]
+          logger.debug("user will be returned to #{session[:redirect_to]}")
+          redirect_to els_session_new_path
+        end
+      rescue Exception => e
+        logger.warn(e)
+        redirect_to els_session_new_path
       end
-    rescue Exception => e
-      logger.warn(e)
-      redirect_to session_new_path
     end
   end
 
