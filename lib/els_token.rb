@@ -48,7 +48,25 @@ module ElsToken
       unless options["uri"]
         raise "I need a uri to authenticate against" unless options["faker"]
       end
-      @els_options = options
+      els_options.merge!(options)
+    end
+    
+    def els_uri(uri = nil)
+      return els_options["uri"] unless uri
+      els_options["uri"] = uri
+    end
+    
+    def els_cookie_name(cookie_name = nil)
+      return els_options["cookie"] unless cookie_name
+      els_options["cookie_name"] = uri
+    end
+    
+    def els_faker(faker = {})
+      els_options["faker"] = faker
+    end
+    
+    def els_options
+      @els_options
     end
   
   end

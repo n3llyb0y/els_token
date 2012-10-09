@@ -6,7 +6,7 @@ module ElsToken
     attr_reader :roles, :mail, :last_name, :first_name, :uac, :dn, :common_name
     attr_reader :employee_number, :display_name, :name, :token_id, :user_status
 
-    alias :cdid, :name
+    alias :cdid :name
     
     # The Active Directory User Account Control contains lots of
     # interesting info about the user account state. This method
@@ -14,7 +14,7 @@ module ElsToken
     # and return either "enabled" or "disabled". There are many
     # other states but I don't use them
     def friendly_uac
-      @friendly_uac || = (@uac.to_i & 2 == 0) ? "enabled" : "disabled"
+      @friendly_uac ||= (@uac.to_i & 2 == 0) ? "enabled" : "disabled"
     end
     
     def has_role?(role)
