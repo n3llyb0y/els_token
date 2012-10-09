@@ -1,3 +1,7 @@
+development:
+  uri: https://els-sso.corp.aol.com/opensso/identity
+  cookie: iPlanetDirectoryPro
+  
 test:
   faker:
     name: neilcuk
@@ -5,7 +9,7 @@ test:
     roles:
       - Passport Admins
       - Domain Users
-  uri: https://els-sso.corp.aol.com:443/opensso/identity
+  uri: https://els-sso.corp.aol.com/opensso/identity
   cookie: iPlanetDirectoryPro
 
     

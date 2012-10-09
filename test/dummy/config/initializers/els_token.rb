@@ -1,4 +1,4 @@
-ELS_CONFIG = YAML.load_file("#{Rails.root}/config/els.yml")["test"]
+ELS_CONFIG = YAML.load_file("#{Rails.root}/config/els.yml")[Rails.env]
 
 class ElsTester  < ActionController::Base
   include ElsToken

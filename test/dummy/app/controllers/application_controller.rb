@@ -4,15 +4,24 @@ class ApplicationController < ActionController::Base
   include ElsToken
   els_config ELS_CONFIG
   
-  before_filter :authenticate
+  before_filter :els_identity
   
   private
   
-  def authenticate
-    @current_user ||= session[:user] ||= get_identity
-    unless session[:user]
-      render :nothing => true, :status => :unauthorized
+  def els_identity
+    begin
+      if session["els_token"]
+        @els_identity ||= get_identity
+      else
+        session[:redirect_to] = request.env["PATH_INFO"]
+        logger.debug("user will be returned to #{session[:redirect_to]}")
+        redirect_to session_new_path
+      end
+    rescue Exception => e
+      logger.warn(e)
+      redirect_to session_new_path
     end
   end
+
 
 end
