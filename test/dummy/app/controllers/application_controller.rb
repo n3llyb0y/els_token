@@ -45,7 +45,9 @@ class ApplicationController < ActionController::Base
   #  @els_identity.has_role? "some group"
   # 
   def els_identity
-    @els_identity = Rails.cache.fetch(session[:els_token], :namespace => "els_identity") do
+    @els_identity = Rails.cache.fetch(session[:els_token], :namespace => "els_identity")
+    unless @els_identity
+      Rails.logger.debug("no identity in cache. Redirecting")
       session[:redirect_to] = request.env["PATH_INFO"]
       logger.debug("user will be returned to #{session[:redirect_to]}")
       redirect_to els_session_new_path
