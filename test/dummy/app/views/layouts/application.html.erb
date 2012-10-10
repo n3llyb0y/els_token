@@ -7,6 +7,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<% if @els_identity %>
+	<div class='els_logout'>
+		<%= button_to "logout", els_session_destroy_path, :method => :delete %>
+	</div>
+<% end %>
 
 <%= yield %>
 

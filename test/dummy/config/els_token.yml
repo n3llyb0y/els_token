@@ -1,0 +1,21 @@
+development:
+  uri: https://elsuat-sso.corp.aol.com/opensso/identity
+  cookie: iPlanetDirectoryProuat
+  
+test:
+  faker:
+    name: neilcuk
+    employee_number: 09095
+    roles:
+      - Passport Admins
+      - Domain Users
+  uri: https://els-sso.corp.aol.com/opensso/identity
+  cookie: iPlanetDirectoryPro
+
+uat:
+  uri: https://els-sso.corp.aol.com/opensso/identity
+  cookie: iPlanetDirectoryPro    
+    
+production:
+  uri: https://els-sso.corp.aol.com/opensso/identity
+  cookie: iPlanetDirectoryPro    

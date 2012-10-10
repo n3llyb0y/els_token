@@ -34,7 +34,7 @@
   <% if Rails.env.eql? "development" %>
     <div class="field">
       <%= label_tag "Override: Just log me in and forget the password. I know what I'm doing, honest :)" %>
-      <%= check_box_tag :override, params[:override], :value => 1 %>
+      <%= check_box_tag :override, params[:override] %>
     </div>
   <% end %>
   <div class="actions"><%= submit_tag "Log in" %></div>
