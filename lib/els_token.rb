@@ -128,7 +128,9 @@ module ElsToken
     # method that chains is_cookie_token_valid?
     # then get_token_identity
     def get_identity(token, options ={})
-      return fake_id if fake_it?
+      options = els_options.dup.merge(options)
+      Rails.logger.debug(options)
+      return fake_id(options) if options.has_key?('faker')
       begin
         if is_token_valid?(token, options)
           get_token_identity(token, options)
@@ -173,23 +175,22 @@ module ElsToken
       els_options.has_key? 'faker'
     end
 
-    def fake_id
-      unless @fake_id
-        id = ElsIdentity.new
-        id.instance_variable_set("@roles",els_options['faker']['roles'])
-        id.instance_variable_set("@mail",els_options['faker']['mail'])
-        id.instance_variable_set("@last_name",els_options['faker']['last_name'])
-        id.instance_variable_set("@first_name",els_options['faker']['first_name'])
-        id.instance_variable_set("@uac",els_options['faker']['uac'])
-        id.instance_variable_set("@dn",els_options['faker']['dn'])
-        id.instance_variable_set("@common_name",els_options['faker']['common_name'])
-        id.instance_variable_set("@employee_number",els_options['faker']['employee_number'])
-        id.instance_variable_set("@display_name",els_options['faker']['display_name'])
-        id.instance_variable_set("@token_id",els_options['faker']['token_id'])
-        id.instance_variable_set("@user_status",els_options['faker']['user_status'])
-        @fake_id = id
-      end
-      @fake_id
+    def fake_id(options ={})
+      options = els_options.dup.merge(options)
+      Rails.logger.debug("getting fake id")
+      id = ElsIdentity.new
+      id.instance_variable_set("@roles",options['faker']['roles'])
+      id.instance_variable_set("@mail",options['faker']['mail'])
+      id.instance_variable_set("@last_name",options['faker']['last_name'])
+      id.instance_variable_set("@first_name",options['faker']['first_name'])
+      id.instance_variable_set("@uac",options['faker']['uac'])
+      id.instance_variable_set("@dn",options['faker']['dn'])
+      id.instance_variable_set("@common_name",options['faker']['common_name'])
+      id.instance_variable_set("@employee_number",options['faker']['employee_number'])
+      id.instance_variable_set("@display_name",options['faker']['display_name'])
+      id.instance_variable_set("@token_id",options['faker']['token_id'])
+      id.instance_variable_set("@user_status",options['faker']['user_status'])
+      id
     end  
   end
 
