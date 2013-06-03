@@ -71,7 +71,6 @@ module ElsToken
     
     # authenticates against ELS and returns the user token
     def authenticate(username,password,options={})
-
       begin
         response = els_http_request("/authenticate",
           "uri=realm=aolcorporate&username=#{username}&password=#{password}",
@@ -129,7 +128,6 @@ module ElsToken
     # then get_token_identity
     def get_identity(token, options ={})
       options = els_options.dup.merge(options)
-      Rails.logger.debug(options)
       return fake_id(options) if options.has_key?('faker')
       begin
         if is_token_valid?(token, options)
@@ -145,6 +143,7 @@ module ElsToken
     private
 
     def els_http_request(url_base_extension, query_string, options)
+      puts url_base_extension + query_string + options
       options = els_options.dup.merge(options)
       uri = URI.parse(options['uri'] + url_base_extension)
       uri.query=query_string
@@ -177,7 +176,6 @@ module ElsToken
 
     def fake_id(options ={})
       options = els_options.dup.merge(options)
-      Rails.logger.debug("getting fake id")
       id = ElsIdentity.new
       id.instance_variable_set("@roles",options['faker']['roles'])
       id.instance_variable_set("@mail",options['faker']['mail'])
